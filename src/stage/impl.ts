@@ -1,6 +1,6 @@
-import {Stage} from "./model.ts";
-import {Actor, ActorSpawner, MessageSpawner} from "../actor/model.ts";
-import {ClassActor} from "../actor/extension.ts";
+import {Stage} from './model.ts';
+import {Actor, ActorSpawner, MessageSpawner} from '../actor/model.ts';
+import {ClassActor} from '../actor/extension.ts';
 
 export const createDefaultStage: Stage<string, object> = (createEntryActor, createAddress, initialMessage) => {
   const actors: { [address: string]: Actor<string, object> } = {};

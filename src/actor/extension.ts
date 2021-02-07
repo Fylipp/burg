@@ -1,4 +1,4 @@
-import {ActorFactory, ActorSpawner, MessageSpawner} from "./model.ts";
+import {ActorFactory, ActorSpawner, MessageSpawner} from './model.ts';
 
 export interface ClassActor<TAddress, TMessage> {
   consume(message: TMessage, createMessage: MessageSpawner<TAddress, TMessage>, createActor: ActorSpawner<TAddress, TMessage>): void;

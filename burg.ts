@@ -1,7 +1,7 @@
 import {v4 as uuid} from 'https://deno.land/std@0.86.0/uuid/mod.ts';
 import {ActorSpawner, MessageSpawner} from './src/actor/model.ts';
-import {classActorFactory} from "./src/actor/extension.ts";
-import {createDefaultStage, DefaultStageClassActor} from "./src/stage/impl.ts";
+import {classActorFactory} from './src/actor/extension.ts';
+import {createDefaultStage, DefaultStageClassActor} from './src/stage/impl.ts';
 
 console.log(
   ' ___               \n' +
