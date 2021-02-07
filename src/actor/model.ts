@@ -1,6 +1,4 @@
-export type Address = string;
-
-export type MessageSpawner = (address: Address, message: unknown) => void;
-export type ActorSpawner = (actorFactory: ActorFactory) => Address;
-export type Actor = (message: unknown, createMessage: MessageSpawner, createActor: ActorSpawner) => void;
-export type ActorFactory = (address: Address) => Actor;
+export type MessageSpawner<TAddress, TMessage> = (address: TAddress, message: TMessage) => void;
+export type ActorSpawner<TAddress, TMessage> = (actorFactory: ActorFactory<TAddress, TMessage>) => TAddress;
+export type Actor<TAddress, TMessage> = (message: TMessage, createMessage: MessageSpawner<TAddress, TMessage>, createActor: ActorSpawner<TAddress, TMessage>) => void;
+export type ActorFactory<TAddress, TMessage> = (address: TAddress) => Actor<TAddress, TMessage>;

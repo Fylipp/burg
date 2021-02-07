@@ -1,13 +1,14 @@
 import {Stage} from "./model.ts";
-import {Actor, ActorFactory, ActorSpawner, Address, MessageSpawner} from "../actor/model.ts";
+import {Actor, ActorSpawner, MessageSpawner} from "../actor/model.ts";
+import {ClassActor} from "../actor/extension.ts";
 
-export const createDefaultStage: Stage = (createEntryActor, createAddress, initialMessage) => {
-  const actors: { [address: string]: Actor } = {}; // Cannot use address type here because of TypeScript limitations
+export const createDefaultStage: Stage<string, object> = (createEntryActor, createAddress, initialMessage) => {
+  const actors: { [address: string]: Actor<string, object> } = {};
 
-  let createMessage: MessageSpawner;
-  let createActor: ActorSpawner;
+  let createMessage: MessageSpawner<string, object>;
+  let createActor: ActorSpawner<string, object>;
 
-  createMessage = (address: Address, message: unknown) => {
+  createMessage = (address, message) => {
     const recipient = actors[address];
 
     if (!recipient) {
@@ -18,7 +19,7 @@ export const createDefaultStage: Stage = (createEntryActor, createAddress, initi
     recipient(message, createMessage, createActor);
   }
 
-  createActor = (actorFactory: ActorFactory): Address => {
+  createActor = (actorFactory) => {
     const newAddress = createAddress();
     actors[newAddress] = actorFactory(newAddress);
     return newAddress;
@@ -27,3 +28,5 @@ export const createDefaultStage: Stage = (createEntryActor, createAddress, initi
   const entryAddress = createActor(createEntryActor);
   createMessage(entryAddress, initialMessage);
 };
+
+export type DefaultStageClassActor = ClassActor<string, object>;

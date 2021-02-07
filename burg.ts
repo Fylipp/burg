@@ -1,7 +1,7 @@
 import {v4 as uuid} from 'https://deno.land/std@0.86.0/uuid/mod.ts';
-import {ActorSpawner, Address, MessageSpawner} from './src/actor/model.ts';
-import {ClassActor, classActorFactory} from "./src/actor/extension.ts";
-import {createDefaultStage} from "./src/stage/impl.ts";
+import {ActorSpawner, MessageSpawner} from './src/actor/model.ts';
+import {classActorFactory} from "./src/actor/extension.ts";
+import {createDefaultStage, DefaultStageClassActor} from "./src/stage/impl.ts";
 
 console.log(
   ' ___               \n' +
@@ -11,18 +11,14 @@ console.log(
   '             |___/ ');
 console.log();
 
-function createUuidAddress(): Address {
-  return uuid.generate();
-}
-
-class EntryActor implements ClassActor {
-  constructor(private readonly address: Address) {
+class EntryActor implements DefaultStageClassActor {
+  constructor(private readonly address: string) {
   }
 
-  consume(message: unknown, createMessage: MessageSpawner, createActor: ActorSpawner) {
-    console.log('I am', this.address, 'and I received', message);
+  consume(message: { counter: number }, createMessage: MessageSpawner<string, object>, createActor: ActorSpawner<string, object>) {
+    console.log('I am', this.address, 'and I received the counter value', message.counter);
 
-    const newMessage = [...(message as Address[]), this.address];
+    const newMessage = {counter: message.counter + 1}
     setTimeout(() => {
       const childAddress = createActor(classActorFactory((address) => new EntryActor(address)));
       createMessage(childAddress, newMessage);
@@ -30,6 +26,6 @@ class EntryActor implements ClassActor {
   }
 }
 
-const createEntryActor = classActorFactory((address) => new EntryActor(address));
+const createEntryActor = classActorFactory<string, object>((address) => new EntryActor(address));
 
-createDefaultStage(createEntryActor, createUuidAddress, []);
+createDefaultStage(createEntryActor, () => uuid.generate(), {counter: 0});

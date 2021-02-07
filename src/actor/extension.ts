@@ -1,13 +1,13 @@
-import {ActorFactory, ActorSpawner, Address, MessageSpawner} from "./model.ts";
+import {ActorFactory, ActorSpawner, MessageSpawner} from "./model.ts";
 
-export interface ClassActor {
-  consume(message: unknown, createMessage: MessageSpawner, createActor: ActorSpawner): void;
+export interface ClassActor<TAddress, TMessage> {
+  consume(message: TMessage, createMessage: MessageSpawner<TAddress, TMessage>, createActor: ActorSpawner<TAddress, TMessage>): void;
 }
 
-export function classActorFactory(classFactory: (address: Address) => ClassActor): ActorFactory {
+export function classActorFactory<TAddress, TMessage>(classFactory: (address: TAddress) => ClassActor<TAddress, TMessage>): ActorFactory<TAddress, TMessage> {
   return (address) => {
     const actorInstance = classFactory(address);
-    return (message: unknown, createMessage: MessageSpawner, createActor: ActorSpawner) =>
+    return (message: TMessage, createMessage: MessageSpawner<TAddress, TMessage>, createActor: ActorSpawner<TAddress, TMessage>) =>
       actorInstance.consume(message, createMessage, createActor);
   };
 }

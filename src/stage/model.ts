@@ -1,4 +1,4 @@
-import {ActorFactory, Address} from "../actor/model.ts";
+import {ActorFactory} from "../actor/model.ts";
 
-export type AddressFactory = () => Address;
-export type Stage = (createEntryActor: ActorFactory, createAddress: AddressFactory, initialMessage: unknown) => void;
+export type AddressFactory<TAddress> = () => TAddress;
+export type Stage<TAddress, TMessage> = (createEntryActor: ActorFactory<TAddress, TMessage>, createAddress: AddressFactory<TAddress>, initialMessage: TMessage) => void;
